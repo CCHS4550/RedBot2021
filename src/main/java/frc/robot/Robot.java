@@ -101,10 +101,10 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
     
     double dist = SmartDashboard.getNumber("Distance", 0);
     double angl = SmartDashboard.getNumber("Angle", 0);
+    Chassis.driveDist(dist, 0.005, 0.05, 0.25, false);
+    Chassis.turnToAngle(angl, 0.005, 0.05, 0.25, false);
     switch (m_autoSelected) {
       case kCustomAuto:
-        Chassis.driveDist(dist, 0.005, 0.05, 0.25, false);
-        Chassis.turnToAngle(angl, 0.005, 0.05, 0.25, false);
         break;
       case kDefaultAuto:
         break;
