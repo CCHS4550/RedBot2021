@@ -30,6 +30,6 @@ public interface RobotMap {
     
     public static final boolean COMPRESSOR_ENABLE = true;
     public static final int SHIFT_SOLENOID_ONE = 0;
-    public static final int SHIFT_SOLENOID_TWO = 2;
+    public static final int SHIFT_SOLENOID_TWO = 7;
 
 }
