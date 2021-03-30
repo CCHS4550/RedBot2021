@@ -102,8 +102,8 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
     double angl = SmartDashboard.getNumber("Angle", 0);
     switch (m_autoSelected) {
       case kCustomAuto:
-      Chassis.driveDist(dist, 0.005, 0.05, 0.25, false);
-      Chassis.turnToAngle(angl, 0.005, 0.05, 0.25, false);
+        Chassis.driveDist(dist, 0.005, 0.05, 0.25, false);
+        Chassis.turnToAngle(angl, 0.005, 0.05, 0.25, false);
         break;
       case kDefaultAuto:
         break;
@@ -132,8 +132,8 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
    */
   @Override
   public void teleopPeriodic() {
-    Chassis.axisDrive(OI.axis(ControMap.L_JOYSTICK_VERTICAL),
-                      OI.axis(ControMap.R_JOYSTICK_HORIZONTAL), 0.5);
+    Chassis.axisDrive(OI.normalize(OI.axis(ControMap.L_JOYSTICK_VERTICAL), -1, 1),
+                     OI.normalize(OI.axis(ControMap.R_JOYSTICK_HORIZONTAL), -1, 1), 0.5);
     
     if(OI.axis(ControMap.RT) > 0.5){
       Chassis.setFastMode(true);
