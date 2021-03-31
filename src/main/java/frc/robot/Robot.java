@@ -33,7 +33,7 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
 
 
   int alliance;
-  double spdmlt = 1;
+  double maxSpd = 1 - OI.axis(PilotMap.Z_AXIS);
 
   /**
    * This function is run when the robot is first started up and should be
@@ -132,13 +132,15 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
    */
   @Override
   public void teleopPeriodic() {
-    Chassis.axisDrive(OI.normalize(OI.axis(ControMap.L_JOYSTICK_VERTICAL), -1, 1),
-                     OI.normalize(OI.axis(ControMap.R_JOYSTICK_HORIZONTAL), -1, 1), 0.5);
+    maxSpd = 1 - OI.axis(PilotMap.Z_AXIS);
+
+    Chassis.axisDrive(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1, 1),
+                     OI.normalize(OI.axis(PilotMap.X_AXIS), -1, 1), maxSpd);
     
-    if(OI.axis(ControMap.RT) > 0.5){
+    if(OI.button(PilotMap.TRIGGER)){
       Chassis.setFastMode(true);
       Chassis.setFactor(0.048);
-    }else{  
+    }else{
       Chassis.setFastMode(false);
       Chassis.setFactor(0.109);
     }
