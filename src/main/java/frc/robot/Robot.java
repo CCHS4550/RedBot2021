@@ -33,7 +33,7 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
 
   int alliance;
   double maxSpd = 1 - OI.axis(PilotMap.Z_AXIS); //Sets the max speed the joystick dial
-  double spdMod = 0.975; //1.5 second deceleration
+  double spdMod = 0.99; //5 second deceleration
  
 
   /**
@@ -138,7 +138,7 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
     maxSpd = 1 - OI.axis(PilotMap.Z_AXIS); //See initilization 
 
     if(OI.button(PilotMap.TRIGGER)){
-      Chassis.lSpd = Chassis.lSpd * spdMod; //Reduces the speed of the robot to 0 over the course of 1.5 seconds 
+      Chassis.lSpd = Chassis.lSpd * spdMod; //Reduces the speed of the robot to 0 over the course of 5 seconds 
       Chassis.rSpd = Chassis.rSpd * spdMod;
       Chassis.driveSpd(Chassis.lSpd, Chassis.rSpd); 
     } else {

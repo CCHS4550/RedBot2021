@@ -26,31 +26,57 @@ public class Chassis implements RobotMap{
     public static Solenoid shiftOne = new Solenoid(RobotMap.SHIFT_SOLENOID_ONE);
     public static Solenoid shiftTwo = new Solenoid(RobotMap.SHIFT_SOLENOID_TWO);
 
+    //Speed variables
+    public static double lSpd = 0;
+    public static double rSpd = 0; 
+
     //To be used in TeleOP
     //Takes in two axises, most likely the controller axises
     //Optimized for a west coast or standard chassis
     //DO NOT USE THIS FOR SWERV DRIVE 
     public static void axisDrive(double yAxis, double xAxis, double max){
-        fLeft.set(-OI.normalize((yAxis - xAxis), -max, max));
-        fRight.set(-OI.normalize((yAxis + xAxis), -max, max));
-        bLeft.set(-OI.normalize((yAxis - xAxis), -max, max));
-        bRight.set(-OI.normalize((yAxis + xAxis), -max, max));
+        double spdMod = 0.005; //Accelerates to max in 4 seconds 
+        double yIn = yAxis * RobotMap.ROBOT_Y_DIR_SIGN; //Joytick input
+        double xIn = xAxis * RobotMap.ROBOT_X_DIR_SIGN;
+
+        double lOut = OI.normalize((yIn - xIn), -max, max); //Joystick input into drivetrain input 
+        double rOut = OI.normalize((yIn + xIn), -max, max);
+
+        //Accelerates/Decelerates the left side via a ramp function 
+        if(lOut > lSpd + spdMod)
+            lSpd = lSpd + spdMod; 
+        else 
+            lSpd = rSpd - spdMod; 
+
+        //Acceleraties/Decelerates the right side via a ramp function
+        if(rOut > rSpd + spdMod)
+            rSpd = rSpd + spdMod; 
+        else 
+            rSpd = rSpd - spdMod; 
     }
 
+    //Zoom(Turns Solenoids on)
     public static void setFastMode(boolean on){
         shiftOne.set(!on);
         shiftTwo.set(on);
     }
 
     //To be used on Auto/PIDs
-    //Simply sets the motor controllers to a certain percent output
+    //Simply sets the speeds to a certain percent output
     public static void driveSpd(double lSpeed, double rSpeed){
-        fLeft.set(OI.normalize(lSpeed, -1.0, 1.0));
-        fRight.set(OI.normalize(rSpeed, -1.0, 1.0));
-        bLeft.set(OI.normalize(lSpeed, -1.0, 1.0));
-        bRight.set(OI.normalize(rSpeed, -1.0, 1.0));
+        lSpd = OI.normalize(lSpeed, -1.0, 1.0);
+        rSpd = OI.normalize(rSpeed, -1.0, 1.0);
     }
 
+    //Drives the robot 
+    public static void drive(){
+        fLeft.set(lSpd);
+        fRight.set(rSpd);
+        bLeft.set(lSpd);
+        bRight.set(rSpd);
+    }
+
+    //Changes the converstion factor(for use with shifting gear boxes)
     public static void setFactor(double factor){
         //0.048 slow, 0.109 fast
         fLeft.setPositionConversionFactor(factor);
@@ -68,6 +94,9 @@ public class Chassis implements RobotMap{
         fRight.reset();
         bLeft.reset();
         bRight.reset();   
+
+        lSpd = 0;
+        rSpd = 0; 
     }
 
     public static double getLDist(){

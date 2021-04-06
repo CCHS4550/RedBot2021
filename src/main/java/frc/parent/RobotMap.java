@@ -23,13 +23,18 @@ public interface RobotMap {
     public static final int BACK_LEFT = 4;
     public static final int BACK_RIGHT = 2;
 
+    //Wheel Polarities
     public static final boolean FORWARD_LEFT_REVERSE = true;
     public static final boolean FORWARD_RIGHT_REVERSE = false;
     public static final boolean BACK_LEFT_REVERSE = true;
     public static final boolean BACK_RIGHT_REVERSE = false;
     
+    //Pneumatic Stuff 
     public static final boolean COMPRESSOR_ENABLE = true;
     public static final int SHIFT_SOLENOID_ONE = 0;
     public static final int SHIFT_SOLENOID_TWO = 7;
 
+    //Other Constancts 
+    public static final int ROBOT_Y_DIR_SIGN = 1;
+    public static final int ROBOT_X_DIR_SIGN = 1;
 }
