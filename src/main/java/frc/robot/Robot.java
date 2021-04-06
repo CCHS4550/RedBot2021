@@ -137,16 +137,9 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
     Chassis.drive();
     maxSpd = 1 - OI.axis(PilotMap.Z_AXIS); //See initilization 
 
-    if(OI.button(PilotMap.TRIGGER)){
-      Chassis.lSpd = Chassis.lSpd * spdMod; //Reduces the speed of the robot to 0 over the course of 5 seconds 
-      Chassis.rSpd = Chassis.rSpd * spdMod;
-      Chassis.driveSpd(Chassis.lSpd, Chassis.rSpd); 
-    } else {
       Chassis.axisDrive(OI.axis(PilotMap.Y_AXIS),
                         OI.axis(PilotMap.X_AXIS), maxSpd); //Runs the robot according to the joystick input 
-    }
     
-   
   }
 
   /**

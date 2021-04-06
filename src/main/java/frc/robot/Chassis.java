@@ -34,25 +34,13 @@ public class Chassis implements RobotMap{
     //Takes in two axises, most likely the controller axises
     //Optimized for a west coast or standard chassis
     //DO NOT USE THIS FOR SWERV DRIVE 
-    public static void axisDrive(double yAxis, double xAxis, double max){
-        double spdMod = 0.005; //Accelerates to max in 4 seconds 
+    public static void axisDrive(double yAxis, double xAxis, double max){ 
         double yIn = yAxis * RobotMap.ROBOT_Y_DIR_SIGN; //Joytick input
         double xIn = xAxis * RobotMap.ROBOT_X_DIR_SIGN;
 
-        double lOut = OI.normalize((yIn - xIn), -max, max); //Joystick input into drivetrain input 
-        double rOut = OI.normalize((yIn + xIn), -max, max);
-
-        //Accelerates/Decelerates the left side via a ramp function 
-        if(lOut > lSpd + spdMod)
-            lSpd = lSpd + spdMod; 
-        else 
-            lSpd = rSpd - spdMod; 
-
-        //Acceleraties/Decelerates the right side via a ramp function
-        if(rOut > rSpd + spdMod)
-            rSpd = rSpd + spdMod; 
-        else 
-            rSpd = rSpd - spdMod; 
+        lSpd = OI.normalize((yIn - xIn), -max, max); //Joystick input into drivetrain input 
+        rSpd = OI.normalize((yIn + xIn), -max, max);
+ 
     }
 
     //Zoom(Turns Solenoids on)
