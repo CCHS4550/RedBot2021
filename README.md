@@ -1,4 +1,4 @@
-# BlueBot2021
+# RedBot2021
 Robot code for the ThingTwo robot.\
 Currently setup for the go kart project.
 Do not use as template for future code, will add that to this account later.\
