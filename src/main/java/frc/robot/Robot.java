@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,7 +32,9 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
 
 
   int alliance;
-  double maxSpd = 1 - OI.axis(PilotMap.Z_AXIS);
+  double maxSpd = 1 - OI.axis(PilotMap.Z_AXIS); //Sets the max speed the joystick dial
+  double spdMod = 0.975; //1.5 second deceleration
+ 
 
   /**
    * This function is run when the robot is first started up and should be
@@ -98,11 +99,11 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     
-    double dist = SmartDashboard.getNumber("Distance", 0);
+    double dist = SmartDashboard.getNumber("Distance", 0); //Pulls test values from SmartDashboard
     double angl = SmartDashboard.getNumber("Angle", 0);
     switch (m_autoSelected) {
       case kCustomAuto:
-        Chassis.driveDist(dist, 0.005, 0.05, 0.25, false);
+        Chassis.driveDist(dist, 0.005, 0.05, 0.25, false); //Tests auto with test values
         Chassis.turnToAngle(angl, 0.005, 0.05, 0.25, false);
         break;
       case kDefaultAuto:
@@ -125,6 +126,7 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
 
   @Override
   public void teleopInit() {
+    maxSpd = 1 - OI.axis(PilotMap.Z_AXIS); //See initlization
   }
 
   /**
@@ -132,19 +134,19 @@ public class Robot extends TimedRobot implements RobotMap, ControMap {
    */
   @Override
   public void teleopPeriodic() {
-    maxSpd = 1 - OI.axis(PilotMap.Z_AXIS);
+    Chassis.drive();
+    maxSpd = 1 - OI.axis(PilotMap.Z_AXIS); //See initilization 
 
-    Chassis.axisDrive(OI.normalize(OI.axis(PilotMap.Y_AXIS), -1, 1),
-                     OI.normalize(OI.axis(PilotMap.X_AXIS), -1, 1), maxSpd);
-    
     if(OI.button(PilotMap.TRIGGER)){
-      Chassis.setFastMode(true);
-      Chassis.setFactor(0.048);
-    }else{
-      Chassis.setFastMode(false);
-      Chassis.setFactor(0.109);
+      Chassis.lSpd = Chassis.lSpd * spdMod; //Reduces the speed of the robot to 0 over the course of 1.5 seconds 
+      Chassis.rSpd = Chassis.rSpd * spdMod;
+      Chassis.driveSpd(Chassis.lSpd, Chassis.rSpd); 
+    } else {
+      Chassis.axisDrive(OI.axis(PilotMap.Y_AXIS),
+                        OI.axis(PilotMap.X_AXIS), maxSpd); //Runs the robot according to the joystick input 
     }
-
+    
+   
   }
 
   /**
